@@ -158,7 +158,7 @@ void GameModule::loadProfiles()
         for (int cnt = 0; cnt < getImportAmount()*MAX_IMPORT_PER_PLAYER; cnt++ )
         {
             std::ostringstream pathFormat;
-            pathFormat << "mp_import/temp" << std::setw(4) << std::setfill('0') << cnt << ".obj";
+            pathFormat << "mp_import/temp" << std::setw(2) << std::setfill('0') << cnt << ".obj";
 
             // Make sure the object exists...
             const std::string importPath = pathFormat.str();
