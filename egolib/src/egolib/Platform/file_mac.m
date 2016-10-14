@@ -74,12 +74,12 @@ std::string fs_getConfigDirectory()
     return [dataPath UTF8String];
 }
 
-int fs_createDirectory(const char *dirName)
+int fs_createDirectory(const std::string &dirName)
 {
     @autoreleasepool {
         BOOL ok;
 
-        NSString *path = [[NSString alloc] initWithUTF8String: dirName];
+        NSString *path = [[NSString alloc] initWithUTF8String: dirName.c_str()];
         ok = [[NSFileManager defaultManager] createDirectoryAtPath:path
                                        withIntermediateDirectories:NO
                                                         attributes:nil
@@ -91,11 +91,11 @@ int fs_createDirectory(const char *dirName)
     }
 }
 
-int fs_removeDirectory(const char *dirName)
+int fs_removeDirectory(const std::string &dirName)
 {
     @autoreleasepool {
         BOOL ok;
-        NSString *path = [[NSString alloc] initWithUTF8String:dirName];
+        NSString *path = [[NSString alloc] initWithUTF8String:dirName.c_str()];
         ok = [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
         [path release];
 
@@ -104,10 +104,10 @@ int fs_removeDirectory(const char *dirName)
     }
 }
 
-void fs_deleteFile(const char *fileName)
+void fs_deleteFile(const std::string &fileName)
 {
     @autoreleasepool {
-        NSString *path = [[NSString alloc] initWithUTF8String:fileName];
+        NSString *path = [[NSString alloc] initWithUTF8String:fileName.c_str()];
         [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
         [path release];
     }
@@ -130,7 +130,7 @@ bool fs_copyFile(const std::string& source, const std::string& target)
     }
 }
 
-int fs_fileIsDirectory(const char *filename)
+int fs_fileIsDirectory(const std::string &filename)
 {
     // Returns 1 if this file is a directory
     @autoreleasepool {
@@ -139,7 +139,7 @@ int fs_fileIsDirectory(const char *filename)
         NSString *path;
         NSFileManager *manager;
 
-        path = [[NSString alloc] initWithUTF8String: filename];
+        path = [[NSString alloc] initWithUTF8String: filename.c_str()];
         manager = [NSFileManager defaultManager];
 
         fileExists = [manager fileExistsAtPath:path isDirectory:&isDir];
