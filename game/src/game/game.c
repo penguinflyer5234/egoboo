@@ -1960,15 +1960,15 @@ egolib_rv game_copy_imports( import_list_t * imp_lst )
         // Copy all of the character's items to the import directory
         for (auto tnc = 0; tnc < MAX_IMPORT_OBJECTS; tnc++ )
         {
-            stringStream.clear();
-            stringStream << import_ptr->srcDir << tnc;
+            stringStream = std::stringstream();
+            stringStream << import_ptr->srcDir << "/" << tnc << ".obj";
             auto tmp_src_dir = stringStream.str();
 
             // make sure the source directory exists
             if ( vfs_isDirectory( tmp_src_dir ) )
             {
-                stringStream.clear();
-                stringStream << "/import/temp" << std::setfill('0') << std::setw(4) << import_ptr->slot + tnc + 1 << ".obj";
+                stringStream = std::stringstream();
+                stringStream << "/import/temp" << std::setfill('0') << std::setw(2) << import_ptr->slot + tnc + 1 << ".obj";
                 auto tmp_dst_dir = stringStream.str();
                 if ( !vfs_copyDirectory( tmp_src_dir.c_str(), tmp_dst_dir.c_str() ) )
                 {

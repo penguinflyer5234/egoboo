@@ -202,7 +202,7 @@ public:
     EndText() : _text(), _carat(0) {}
     void setText(const std::string& text) {
         _text = text;
-        add_linebreak_cpp(_text, 30);
+        _text = add_linebreak_cpp(_text, 30);
         _carat = _text.length();
     }
     const std::string& getText() const {
