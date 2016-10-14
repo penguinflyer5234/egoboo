@@ -49,6 +49,7 @@ struct DebugModuleLoadingState::ModuleGUIContainer : public Container
         _loadingText(std::make_shared<Ego::GUI::Label>("Not Loaded"))
     {
         _moduleName->setSize(Vector2f(200, 30));
+        _loadingText->setPosition(Point2f(215, 0));
         
         addComponent(_moduleName);
         addComponent(_loadingText);
@@ -73,13 +74,6 @@ struct DebugModuleLoadingState::ModuleGUIContainer : public Container
     }
     
     void drawContainer(Ego::GUI::DrawingContext& drawingContext) override {}
-    
-    void setPosition(const Point2f& position) override
-    {
-        Component::setPosition(position);
-        _moduleName->setPosition(position);
-        _loadingText->setPosition(position + Vector2f(215, 0));
-    }
         
     std::shared_ptr<ModuleProfile> _profile;
     std::shared_ptr<Ego::GUI::Button> _moduleName;
@@ -133,10 +127,10 @@ DebugModuleLoadingState::DebugModuleLoadingState() :
 
 DebugModuleLoadingState::~DebugModuleLoadingState()
 {
-	//Wait until thread is dead
-	if(_loadingThread.joinable()) {
-		_loadingThread.join();
-	}
+    //Wait until thread is dead
+    if(_loadingThread.joinable()) {
+        _loadingThread.join();
+    }
 }
 
 void DebugModuleLoadingState::addToQueue(const std::shared_ptr<ModuleGUIContainer> &toAdd)
@@ -179,9 +173,8 @@ void DebugModuleLoadingState::drawContainer(Ego::GUI::DrawingContext& drawingCon
 
 void DebugModuleLoadingState::beginState()
 {
-	//Start the background loading thread
-	//_loadingThread = std::thread(&LoadingState2::loadModuleData, this);
-    AudioSystem::get().playMusic("loading_screen.ogg");
+    //Start the background loading thread
+    //_loadingThread = std::thread(&LoadingState2::loadModuleData, this);
 }
 
 
@@ -239,9 +232,8 @@ void DebugModuleLoadingState::loadModuleData()
         BillboardSystem::get().reset();
 
         // Linking system
-		Log::get().info("Initializing module linking... ");
-        if (link_build_vfs( "mp_data/link.txt", LinkList)) Log::get().message("Success!\n");
-        else Log::get().message( "Failure!\n" );
+        singleThreadRedrawHack("Initializing module linking... ");
+        if (!link_build_vfs( "mp_data/link.txt", LinkList)) Log::get().warn("Failed to initialize module linking\n");
 
         // initialize the collision system
         singleThreadRedrawHack("Beautifying graphics...");
@@ -250,7 +242,6 @@ void DebugModuleLoadingState::loadModuleData()
         ProfileSystem::get().reset();
 
         // do some graphics initialization
-        //make_lightdirectionlookup();
         gfx_system_make_enviro();
 
         //Load players if needed
@@ -275,41 +266,38 @@ void DebugModuleLoadingState::loadModuleData()
         // and camera_system_begin() will not set up thte correct view
         CameraSystem::get().initialize(local_stats.player_count);
 
-        //Fade out music when finished loading
-        AudioSystem::get().stopMusic();
-
         //Complete!
         singleThreadRedrawHack("Finished!");
     }
     catch (Id::Exception &ex)
     {
-        std::string out = std::string("Ego::Exception: ") + std::string(ex);
+        std::string out = std::string("Id::Exception: ") + std::string(ex);
         singleThreadRedrawHack(out);
-		Log::get().warn("error loading %s... %s\n", _loadModule->getFolderName().c_str(), out.c_str());
+        Log::get().warn("error loading %s... %s\n", _loadModule->getFolderName().c_str(), out.c_str());
     }
     catch (std::exception &ex)
     {
         std::string out = std::string("std::exception: ") + ex.what();
         singleThreadRedrawHack(out);
-		Log::get().warn("error loading %s... %s\n", _loadModule->getFolderName().c_str(), out.c_str());
+        Log::get().warn("error loading %s... %s\n", _loadModule->getFolderName().c_str(), out.c_str());
     }
     catch (std::string &ex)
     {
         std::string out = std::string("std::string: ") + ex;
         singleThreadRedrawHack(out);
-		Log::get().warn("error loading %s... %s\n", _loadModule->getFolderName().c_str(), out.c_str());
+        Log::get().warn("error loading %s... %s\n", _loadModule->getFolderName().c_str(), out.c_str());
     }
     catch (char *ex)
     {
         std::string out = std::string("C string: ") + ex;
         singleThreadRedrawHack(out);
-		Log::get().warn("error loading %s... %s\n", _loadModule->getFolderName().c_str(), out.c_str());
+        Log::get().warn("error loading %s... %s\n", _loadModule->getFolderName().c_str(), out.c_str());
     }
     catch (...)
     {
         std::string out = "unknown error";
         singleThreadRedrawHack(out);
-		Log::get().warn("error loading %s... %s\n", _loadModule->getFolderName().c_str(), out.c_str());
+        Log::get().warn("error loading %s... %s\n", _loadModule->getFolderName().c_str(), out.c_str());
     }
     _toLoad.pop_front();
 }

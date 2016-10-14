@@ -54,7 +54,8 @@ public:
     }
     
     void draw(Ego::GUI::DrawingContext& drawingContext) override {
-        _textRenderer->render(getX(), getY());
+        auto pos = getDerivedPosition();
+        _textRenderer->render(pos.x(), pos.y());
     }
     
     void setText(const std::string &text) {
@@ -92,6 +93,7 @@ struct DebugObjectLoadingState::ObjectGUIContainer : public Container
     _module(module)
     {
         _objectName->setSize(Vector2f(250, 30));
+        _loadingText->setPosition(Point2f(265, 0));
         
         addComponent(_objectName);
         addComponent(_loadingText);
@@ -113,18 +115,11 @@ struct DebugObjectLoadingState::ObjectGUIContainer : public Container
     }
     
     void drawContainer(Ego::GUI::DrawingContext& drawingContext) override {}
-    
-    void setPosition(const Point2f& position) override
-    {
-        Component::setPosition(position);
-        _objectName->setPosition(position);
-        _loadingText->setPosition(position + Vector2f(265, (getHeight() - _loadingText->getHeight()) / 2));
-    }
         
     void relayout() {
         int height = std::max(_objectName->getHeight(), _loadingText->getHeight());
         setHeight(height);
-        _loadingText->setY(getY() + (height - _loadingText->getHeight()) / 2);
+        _loadingText->setY((height - _loadingText->getHeight()) / 2);
         auto scrollList = dynamic_cast<Ego::GUI::ScrollableList *>(getParent());
         if (!scrollList) return;
         scrollList->forceUpdate();

@@ -37,35 +37,38 @@ class ScrollableList;
 class DebugModuleLoadingState : public GameState
 {
 public:
-	DebugModuleLoadingState();
-	~DebugModuleLoadingState();
+    DebugModuleLoadingState();
+    ~DebugModuleLoadingState();
 
-	void update() override;
+    void update() override;
 
-	void beginState() override;
+    void beginState() override;
 	
     void draw(Ego::GUI::DrawingContext& drawingContext) override { drawContainer(drawingContext); }
+
 protected:
-	void drawContainer(Ego::GUI::DrawingContext& drawingContext) override;
+    void drawContainer(Ego::GUI::DrawingContext& drawingContext) override;
+    
+private:
 
-	void loadModuleData();
+    void loadModuleData();
 
-	/**
-	* @brief
-	*	Actually loads all data for the Characters that players have picked.
-	**/
-	bool loadPlayers();
+    /**
+    * @brief
+    *	Actually loads all data for the Characters that players have picked.
+    **/
+    bool loadPlayers();
 
-	/**
-	* ZF> This function is a place-holder hack until we get proper threaded loading working
-	**/
-	void singleThreadRedrawHack(const std::string &loadingText);
+    /**
+    * ZF> This function is a place-holder hack until we get proper threaded loading working
+    **/
+    void singleThreadRedrawHack(const std::string &loadingText);
 
 private:
 	std::atomic_bool _finishedLoading;
-	std::thread _loadingThread;
+    std::thread _loadingThread;
     std::shared_ptr<Ego::GUI::ScrollableList> _scrollableList;
-	std::list<std::string> _playersToLoad;
+    std::list<std::string> _playersToLoad;
     
     struct ModuleGUIContainer;
     std::vector<std::shared_ptr<ModuleGUIContainer>> _moduleList;

@@ -62,6 +62,7 @@ public:
     void setX(float x) override;
     void setY(float y) override;
     void setPosition(const Point2f& position) override;
+    void setSize(const Vector2f& size) override;
 
 protected:
     void drawContainer(DrawingContext& drawingContext) override;

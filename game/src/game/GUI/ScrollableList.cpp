@@ -33,7 +33,7 @@ ScrollableList::ScrollableList() :
 
 void ScrollableList::setScrollPosition(int position) {
     //Limit bounds
-    if (position < 0 || position >= getComponentCount()) {
+    if (position < 0 || position >= getComponentCount() - 2) {
         return;
     }
 
@@ -42,7 +42,7 @@ void ScrollableList::setScrollPosition(int position) {
 
     //Dynamically enable and disable scrolling buttons as needed
     _upButton->setEnabled(_currentIndex > 0);
-    _downButton->setEnabled(_currentIndex < getComponentCount() - 1);
+    _downButton->setEnabled(_currentIndex < getComponentCount() - 3);
 
     //Shift position of all components in container
     int yOffset = 0;
@@ -137,6 +137,11 @@ void ScrollableList::setPosition(const Point2f& position) {
     Component::setPosition(position);
     updateScrollButtons();
     setScrollPosition(_currentIndex);
+}
+    
+void ScrollableList::setSize(const Vector2f &size) {
+    Component::setSize(size);
+    updateScrollButtons();
 }
 
 } // namespace GUI
