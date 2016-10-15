@@ -25,7 +25,7 @@ static NSString *userPath = nil;
 //---------------------------------------------------------------------------------------------
 //File Routines-------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------
-int sys_fs_init(const char *root_path)
+int sys_fs_init(const std::string& argument0, const std::string& rootPath)
 {
     // JF> This function determines the temporary, import,
     // game data and save paths

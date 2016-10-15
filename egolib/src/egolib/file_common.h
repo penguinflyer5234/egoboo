@@ -78,100 +78,30 @@ typedef struct fs_find_context_t
 // GLOBAL FUNCTION PROTOTYPES
 //--------------------------------------------------------------------------------------------
 
-/**
- * @brief
- *  Initialize the file system.
- * @param argv0
- *  the first argument of the command-line
- * @return
- *  @a 0 on success, a non-zero value on failure
- * @remark
- *  Among other things, it determines the paths returned by
- *  fs_getBinarDirectory(), fs_getDataDirectory(), fs_getUserDirectory()
- *  and fs_getConfigDirectory().
- */
-int fs_init(const char *argv0);
+/// @brief Initialize the file system.
+/// @param argument0 the first argument of the command-line
+/// @return @a 0 on success, a non-zero value on failure
+int fs_init(const std::string& argument0);
+
+/// @brief Initialize the file system.
+/// @param argument0 the first argument of the command-line
+/// @param rootPath the root path
+/// @return @a 0 on success, a non-zero value on failure
+int fs_init(const std::string& argument0, const std::string& rootPath);
+
+/// @brief Ensure the file system is uninitialized.
+void fs_uninit();
 
 /**@{*/
 
-/**
- * @brief
- *  Functions to obtain absolute pathnames of the binary, configuration, data, and user directories.
- * @remark
- *  Those functions return pointers to C strings and never return a null pointer.
- *  The C strings may not be modified and remain unchanged until the file system is uninitialized..
- */
-
-/// @brief Get the binary directory pathname.
-/// @return the binary directory pathname
-std::string fs_getBinaryDirectory();
-
-/// @brief Get the data directory pathname
-/// @return the data directory pathname
-std::string fs_getDataDirectory();
-
-/// @brief Get the user directory pathname
-/// @return the user directory pathname
-std::string fs_getUserDirectory();
-
-/// @brief Get the configuration directory pathname.
-/// @return the configuration directory pathname
-std::string fs_getConfigDirectory();
-
 /**@}*/
 
-/// @brief Get if a file exists.
-/// @param pathname the pathname
-/// @return @a 1 if the file exists, @a 0 if it does not exist, @a -1 if an invalid argument was passed.
-int fs_fileExists(const std::string& pathname);
-
-/// @brief Get if a directory exists.
-/// @param pathname the pathname
-/// @return @a 1 if the directory exists, @a 0 if it does not exist, @a -1 if an invalid argument was passed.
-int fs_fileIsDirectory(const std::string& pathname);
-
-/**
- * @brief
- *  Create a directory.
- * @param pathname
- *  the pathname of the directory
- * @return
- *  @a 0 on success, a non-zero value on failure
- * @remark
- *  All intermediate directories must exist;
- *  this function will only create the final directory in the path.
- */
-int fs_createDirectory(const std::string& pathname);
-/**
- * @brief
- *  Remove a directory.
- * @param pathname
- *  the pathname of the directory
- * @return
- *  @a 0 on success, a non-zero value on failure
- * @remark
- *  This function will only remove the final directory in the path.
- */
-int fs_removeDirectory(const std::string& pathname);
-/**
- * @brief
- *  Delete a file.
- * @param pathname
- *  the pathname of the file
- */
-void fs_deleteFile(const std::string& pathname);
-bool fs_copyFile(const std::string& source, const std::string& target);
 void fs_removeDirectoryAndContents(const char *pathname, int recursive);
-/**
- * @brief
- *  Copy all files in a directory into another directory.
- * @param sourceDir
- *  the pathname of the source directory
- * @param targetDir
- *  the pathname of the target directory
- * @remark
- *  If the target directory does not exist, it is created.
- */
+
+/// @brief Copy all files in a directory into another directory.
+/// @param sourcePath the source path
+/// @param targetPath the target path
+/// @remark If the target directory does not exist, it is created.
 void fs_copyDirectory(const char *source, const char *target);
 
 /**

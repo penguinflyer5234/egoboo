@@ -45,7 +45,8 @@ typedef struct s_linux_find_context linux_find_context_t;
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-extern int sys_fs_init(const char *root_dir);
+extern int sys_fs_init(const std::string& argument0);
+extern int sys_fs_init(const std::string& argument0, const std::string& rootPath);
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
@@ -61,11 +62,7 @@ struct s_linux_find_context
     size_t find_index;
 };
 
-int sys_fs_init(const char *root_dir)
-{
-    // root_dir currently has no use in linux, since all of the egoboo game directories
-    // are in fixed locations
-
+int sys_fs_init(const std::string& argument0) {
     printf("initializing filesystem services\n");
 
     // grab the user's home directory
@@ -103,11 +100,15 @@ int sys_fs_init(const char *root_dir)
            "\tConfiguration: %s\n",
            _binaryPath, _dataPath, _userPath, _configPath);
 
-    if (!fs_fileIsDirectory(_userPath))
-    {
+    if (!fs_fileIsDirectory(_userPath)) {
         fs_createDirectory(_userPath); /// @todo Error handling.
     }
     return 0;
+}
+
+int sys_fs_init(const std::string& argument0, const std::string& rootPath) {
+    // rootPath currently has no use in Linux, since all of the Egoboo game directories are in fixed locations.
+    return sys_fs_init(argument0);
 }
 
 int fs_fileIsDirectory(const std::string& pathname)

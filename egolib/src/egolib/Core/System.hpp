@@ -107,29 +107,24 @@ class System : public Singleton<System> {
 protected:
     friend Singleton<System>::CreateFunctorType;
     friend Singleton<System>::DestroyFunctorType;
-    /**
-     * @brief
-     *  Construct this system.
-     * @remark
-     *  Intentionally protected.
-     */
+    /// @brief Construct this system.
+    /// @param binaryPath the binary path
+    /// @param egobooPath the Egoboo path
+    /// @remark Intentionally protected.
     System(const std::string& binaryPath, const std::string& egobooPath);
+    
+    /// @brief Construct this system.
+    /// @param binaryPath the binary path
+    /// @remark Intentionally protected
     System(const std::string& binaryPath);
 
-    /**
-     * @brief
-     *  Destruct this system.
-     * @remark
-     *  Intentionally protected.
-     */
+    /// @brief Destruct this system.
+    /// @remark Intentionally protected.
     virtual ~System();
 
 public:
 
-    /**
-     * @brief
-     *  The version of the Egoboo Engine.
-     */
+    /// @brief The version of the Egoboo Engine.
     static const std::string VERSION;
 
 private:

@@ -29,6 +29,7 @@
 #include "egolib/strutil.h"
 #include "egolib/vfs.h"
 #include "egolib/platform.h"
+#include "egolib/FileSystem/FileSystem.hpp"
 
 #if !defined(MAX_PATH)
 #define MAX_PATH 260  // Same value that Windows uses...
@@ -40,31 +41,51 @@ static bool _fs_initialized = false;
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
-/**
- * @brief
- *  Initialize the platform file system.
- * @param argv0
- *  the first argument of the command-line
- * @return
- *  @a 0 on success, a non-zero value on failure
- */
-int sys_fs_init(const char *argv0);
+/// @brief Initialize the platform file system.
+/// @param argument0 the first argument of the command-line
+/// @return @a 0 on success, a non-zero value on failure
+int sys_fs_init(const std::string& argument0);
+
+/// @brief Initialize the platform file system.
+/// @param argument0 the first argument of the command-line
+/// @param rootPath the root path
+/// @return @a 0 on success, a non-zero value on failure
+int sys_fs_init(const std::string& argument0, const std::string& rootPath);
+
+/// @brief Uninitialize the platform file system.
+void sys_fs_uninit();
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-int fs_init(const char *argv0)
-{
-    if (_fs_initialized)
-    {
+int fs_init(const std::string& argument0) {
+    if (_fs_initialized) {
         return 0;
     }
-    if (sys_fs_init(argv0))
-    {
+    if (sys_fs_init(argument0)) {
         return 1;
     }
     _fs_initialized = true;
     return 0;
+}
+
+int fs_init(const std::string& argument0, const std::string& rootPath) {
+    if (_fs_initialized) {
+        return 0;
+    }
+    if (sys_fs_init(argument0, rootPath)) {
+        return 1;
+    }
+    _fs_initialized = true;
+    return 0;
+}
+
+void fs_uninit() {
+    if (!_fs_initialized) {
+        return;
+    }
+    sys_fs_uninit();
+    _fs_initialized = false;
 }
 
 //--------------------------------------------------------------------------------------------
@@ -87,7 +108,7 @@ void fs_removeDirectoryAndContents(const char *dirname, int recursive)
         if ('.' != fileName[0])
         {
             snprintf(filePath, MAX_PATH, "%s" SLASH_STR "%s", dirname, fileName);
-            if (fs_fileIsDirectory(filePath))
+            if (Ego::FileSystem::get().directoryExists(filePath))
             {
                 if (recursive)
                 {
@@ -95,19 +116,19 @@ void fs_removeDirectoryAndContents(const char *dirname, int recursive)
                 }
                 else
                 {
-                    fs_removeDirectory(filePath);
+                    Ego::FileSystem::get().removeDirectory(filePath);
                 }
             }
             else
             {
-                fs_deleteFile(filePath);
+                Ego::FileSystem::get().removeFile(filePath);
             }
         }
         fileName = fs_findNextFile(&fs_search);
     }
     fs_findClose(&fs_search);
 
-    fs_removeDirectory(dirname);
+    Ego::FileSystem::get().removeDirectory(dirname);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -120,7 +141,7 @@ void fs_copyDirectory(const char *sourceDir, const char *targetDir)
     if (filename)
     {
         // Make sure the destination directory exists.
-        fs_createDirectory(targetDir); /// @todo Error handling here - if the directory does not exist, we can stop.
+        Ego::FileSystem::get().createDirectory(targetDir); /// @todo Error handling here - if the directory does not exist, we can stop.
 
         while (filename)
         {
@@ -130,7 +151,7 @@ void fs_copyDirectory(const char *sourceDir, const char *targetDir)
                 char sourcePath[MAX_PATH] = EMPTY_CSTR, targetPath[MAX_PATH] = EMPTY_CSTR;
                 snprintf(sourcePath, MAX_PATH, "%s" SLASH_STR "%s", sourceDir, filename);
                 snprintf(targetPath, MAX_PATH, "%s" SLASH_STR "%s", targetDir, filename);
-                fs_copyFile(sourcePath, targetPath);
+                Ego::FileSystem::get().copyFile(sourcePath, targetPath);
             }
 
             filename = fs_findNextFile(&fs_search);
@@ -138,22 +159,6 @@ void fs_copyDirectory(const char *sourceDir, const char *targetDir)
     }
 
     fs_findClose(&fs_search);
-}
-
-//--------------------------------------------------------------------------------------------
-int fs_fileExists(const std::string& filename)
-{
-    if (filename.empty())
-    {
-        return -1;
-    }
-    FILE *ptmp = fopen(filename.c_str(), "rb");
-    if (ptmp)
-    {
-        fclose(ptmp);
-        return 1;
-    }
-    return 0;
 }
 
 //--------------------------------------------------------------------------------------------
@@ -168,20 +173,20 @@ bool fs_ensureUserFile( const char * relative_filename, bool required )
     /// the fact that PHYSFS will not add the same directory to 2 different mount points...
     /// seems pretty stupid to me, but there you have it.
 
-    std::string path_str = fs_getUserDirectory() + std::string(SLASH_STR) + relative_filename;
+    std::string path_str = Ego::FileSystem::get().getUserDirectoryPath() + std::string(SLASH_STR) + relative_filename;
     path_str = str_convert_slash_sys( path_str );
 
-    int found = fs_fileExists( path_str );
-    if ( 0 == found )
+    bool found = Ego::FileSystem::get().fileExists( path_str );
+    if (!found)
     {
         // copy the file from the Data Directory to the User Directory
-        std::string src_path_str = fs_getConfigDirectory() + std::string(SLASH_STR) + relative_filename;
-        fs_copyFile( src_path_str.c_str(), path_str.c_str() );
-        found = fs_fileExists( path_str.c_str() );
+        std::string src_path_str = Ego::FileSystem::get().getConfigurationDirectoryPath() + std::string(SLASH_STR) + relative_filename;
+        Ego::FileSystem::get().copyFile( src_path_str, path_str );
+        found = Ego::FileSystem::get().fileExists( path_str );
     }
 
     // if it still doesn't exist, we have problems
-    if (( 0 == found ) && required )
+    if ( !found && required )
     {
 		std::ostringstream os;
 		os << "cannot find the file `" << relative_filename << "`" << std::endl;
@@ -189,5 +194,5 @@ bool fs_ensureUserFile( const char * relative_filename, bool required )
 		throw std::runtime_error(os.str());
     }
 
-    return ( 0 != found );
+    return found;
 }

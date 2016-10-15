@@ -123,18 +123,18 @@ const std::string System::VERSION = "0.1.9";
 
 System::System(const std::string& binaryPath) {
     // Initialize the virtual file system.
-    vfs_init(binaryPath.c_str(), nullptr);
+    vfs_init(binaryPath);
+    // Initialize logging, so that we can use it everywhere.
+    Log::initialize("/debug/log.txt", Log::Level::Debug);
     /*
     // Uncomment to display the search paths.
     vfs_listSearchPaths();
     */
     setup_init_base_vfs_paths();
-    /*
+    
     // Uncomment to display the search paths.
     vfs_listSearchPaths();
-    */
-    // Initialize logging, so that we can use it everywhere.
-    Log::initialize("/debug/log.txt", Log::Level::Debug);
+    
 
     // Start initializing the various subsystems.
     Log::get().message("Starting Egoboo Engine %s\n", VERSION.c_str());
@@ -212,7 +212,7 @@ System::System(const std::string& binaryPath) {
 
 System::System(const std::string& binaryPath, const std::string& egobooPath) {
     // Initialize the virtual file system.
-    vfs_init(binaryPath.c_str(), egobooPath.c_str());
+    vfs_init(binaryPath, egobooPath);
     /*
     // Uncomment to display the search paths.
     vfs_listSearchPaths();
@@ -244,7 +244,7 @@ System::System(const std::string& binaryPath, const std::string& egobooPath) {
         setup_end();
         /*sys_uninitialize();*/
         Log::uninitialize();
-        /*vfs_uninitialize();*/
+        vfs_uninit();
         std::rethrow_exception(std::current_exception());
     }
     try {
@@ -255,7 +255,7 @@ System::System(const std::string& binaryPath, const std::string& egobooPath) {
         setup_end();
         /*sys_uninitialize();*/
         Log::uninitialize();
-        /*vfs_uninitialize();*/
+        vfs_uninit();
         std::rethrow_exception(std::current_exception());
     }
     try {
@@ -267,7 +267,7 @@ System::System(const std::string& binaryPath, const std::string& egobooPath) {
         setup_end();
         /*sys_uninitialize();*/
         Log::uninitialize();
-        /*vfs_uninitialize();*/
+        vfs_uninit();
         std::rethrow_exception(std::current_exception());
     }
     try {
@@ -280,7 +280,7 @@ System::System(const std::string& binaryPath, const std::string& egobooPath) {
         setup_end();
         /*sys_uninitialize();*/
         Log::uninitialize();
-        /*vfs_uninitialize();*/
+        vfs_uninit();
         std::rethrow_exception(std::current_exception());
     }
     try {
@@ -294,7 +294,7 @@ System::System(const std::string& binaryPath, const std::string& egobooPath) {
         setup_end();
         /*sys_uninitialize();*/
         Log::uninitialize();
-        /*vfs_uninitialize();*/
+        vfs_uninit();
         std::rethrow_exception(std::current_exception());
     }
 }
@@ -310,7 +310,7 @@ System::~System() {
     Log::get().message("Exiting Egoboo Engine %s.\n", VERSION.c_str());
     Log::uninitialize();
     setup_clear_base_vfs_paths();
-    /*vfs_uninitialize();*/
+    vfs_uninit();
 }
 
 } // namespace Core

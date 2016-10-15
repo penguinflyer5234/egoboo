@@ -157,6 +157,42 @@
     <Filter Include="Header Files\Configuration">
       <UniqueIdentifier>{ae7714a7-d83d-4194-aeca-c072b6474de3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FileSystem">
+      <UniqueIdentifier>{f07ba375-f1ba-4ba5-9523-085735d380e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileSystem\iOS">
+      <UniqueIdentifier>{022910fb-1aff-4f17-bf5f-59b1588204e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileSystem\Windows">
+      <UniqueIdentifier>{1fae55b9-0e03-4a10-bc67-4f9c4fdf6210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileSystem\Linux">
+      <UniqueIdentifier>{56021902-ed95-4b9b-9328-eb3b08f050a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileSystem\OSX">
+      <UniqueIdentifier>{72ac5139-715e-41a8-a228-746fdb5c879e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem">
+      <UniqueIdentifier>{c2623c2b-cbcb-47e8-96e2-9a66de6845c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem\iOS">
+      <UniqueIdentifier>{73682c13-69c5-40df-96de-08ad470f2d70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem\Windows">
+      <UniqueIdentifier>{c0b169a4-fed3-4a52-8850-87c792818e04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem\Linux">
+      <UniqueIdentifier>{c76ff776-3b0e-41cc-b3b8-9ef2dcc91552}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem\OSX">
+      <UniqueIdentifier>{d6ff5f59-c75f-4810-a26d-7f98ea67e542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileSystem\iOSSimulator">
+      <UniqueIdentifier>{7e37ee7e-2e23-4b32-9c3e-5d94166ffa13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem\iOSSimulator">
+      <UniqueIdentifier>{abec068d-c0d3-4047-8330-fde4f5dcb867}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\egolib\_math.c">
@@ -536,6 +572,24 @@
     </ClCompile>
     <ClCompile Include="src\egolib\VFS\VfsPath.cpp">
       <Filter>Source Files\VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\FileSystem.cpp">
+      <Filter>Source Files\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\Windows\FileSystem.cpp">
+      <Filter>Source Files\FileSystem\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\OSX\FileSystem.cpp">
+      <Filter>Source Files\FileSystem\OSX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\Linux\FileSystem.cpp">
+      <Filter>Source Files\FileSystem\Linux</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\iOS\FileSystem.cpp">
+      <Filter>Source Files\FileSystem\iOS</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\iOSSimulator\FileSystem.cpp">
+      <Filter>Source Files\FileSystem\iOSSimulator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1348,6 +1402,24 @@
     </ClInclude>
     <ClInclude Include="src\egolib\VFS\VfsPath.hpp">
       <Filter>Header Files\VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\egolib\FileSystem\iOS\FileSystem.hpp">
+      <Filter>Header Files\FileSystem\iOS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\egolib\FileSystem\Linux\FileSystem.hpp">
+      <Filter>Header Files\FileSystem\Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="src\egolib\FileSystem\OSX\FileSystem.hpp">
+      <Filter>Header Files\FileSystem\OSX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\egolib\FileSystem\Windows\FileSystem.hpp">
+      <Filter>Header Files\FileSystem\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\egolib\FileSystem\FileSystem.hpp">
+      <Filter>Header Files\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\egolib\FileSystem\iOSSimulator\FileSystem.hpp">
+      <Filter>Header Files\FileSystem\iOSSimulator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

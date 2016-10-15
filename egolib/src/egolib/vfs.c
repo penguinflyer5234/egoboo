@@ -31,6 +31,7 @@
 #include "egolib/strutil.h"
 #include "egolib/endian.h"
 #include "egolib/fileutil.h"
+#include "egolib/FileSystem/FileSystem.hpp"
 #include "egolib/Core/StringUtilities.hpp"
 
 //--------------------------------------------------------------------------------------------
@@ -138,13 +139,11 @@ struct s_vfs_path_data
 //--------------------------------------------------------------------------------------------
 
 static std::vector<vfs_path_data_t> _vfs_mount_infos;
-static bool _vfs_atexit_registered = false;
 static bool _vfs_initialized = false;
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
 
-static void _vfs_exit();
 static int _vfs_ensure_write_directory(const std::string& filename, bool is_directory);
 
 
@@ -161,36 +160,29 @@ static int fake_physfs_vprintf(PHYSFS_File *file, const char *format, va_list ar
 
 //--------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
-int vfs_init(const char *argv0, const char *root_dir)
-{
-    std::string temp_path;
-
-    if (fs_init(root_dir))
-    {
-        return 1;
-    }
-    
-    if (!fs_fileIsDirectory(fs_getDataDirectory()))
-    {
-        // We can call log functions, they won't try to write to unopened log files
-        // But mainly this is used for sys_popup
-        Log::get().error("The data path isn't a directory.\nData path: '%s'\n", fs_getDataDirectory().c_str());
+int vfs_init(const std::string& argument0) {
+    if (fs_init(argument0)) {
         return 1;
     }
 
-    if (_vfs_initialized)
-    {
+    if (!Ego::FileSystem::get().directoryExists(Ego::FileSystem::get().getDataDirectoryPath())) {
+        // We can not call log functions, as they rely on the VFS.
+        std::cerr << "the data path isn't a directory." << std::endl
+                  << " data path: " << Ego::FileSystem::get().getDataDirectoryPath() << std::endl;
+        return 1;
+    }
+
+    if (_vfs_initialized) {
         return 0;
     }
 
-    if (!PHYSFS_init(argv0))
-    {
+    if (!PHYSFS_init(argument0.c_str())) {
         return 1;
     }
+    std::string temp_path;
     // Append the data directory to the search directories.
-    temp_path = std::string(fs_getDataDirectory()) + SLASH_STR;
-    if (!PHYSFS_mount(temp_path.c_str(), "/", 1))
-    {
+    temp_path = Ego::FileSystem::get().getDataDirectoryPath() + SLASH_STR;
+    if (!PHYSFS_mount(temp_path.c_str(), "/", 1)) {
         PHYSFS_deinit();
         return 1;
     }
@@ -198,44 +190,85 @@ int vfs_init(const char *argv0, const char *root_dir)
     //---- !!!! make sure the basic directories exist !!!!
 
     // Ensure that the /user directory exists.
-    if (!fs_fileIsDirectory(fs_getUserDirectory()))
-    {
-        fs_createDirectory(fs_getUserDirectory()); ///< @todo Error handling!
+    if (!Ego::FileSystem::get().directoryExists(Ego::FileSystem::get().getUserDirectoryPath())) {
+        Ego::FileSystem::get().createDirectory(Ego::FileSystem::get().getUserDirectoryPath()); ///< @todo Error handling!
     }
 
     // Ensure that the /user/debug directory exists.
-    if (!fs_fileIsDirectory(fs_getUserDirectory()))
-    {
-        printf("WARNING: cannot create write directory %s\n", fs_getUserDirectory().c_str());
-    }
-    else
-    {
-        temp_path = std::string(fs_getUserDirectory()) + "/debug";
+    if (!Ego::FileSystem::get().directoryExists(Ego::FileSystem::get().getUserDirectoryPath())) {
+        printf("WARNING: cannot create write directory %s\n", Ego::FileSystem::get().getUserDirectoryPath().c_str());
+    } else {
+        temp_path = std::string(Ego::FileSystem::get().getUserDirectoryPath()) + "/debug";
         temp_path = str_convert_slash_sys(temp_path);
-        fs_createDirectory(temp_path.c_str());
+        Ego::FileSystem::get().createDirectory(temp_path.c_str());
     }
 
     // Set the write directory to the root user directory.
-    if (!PHYSFS_setWriteDir(fs_getUserDirectory().c_str()))
-    {
+    if (!PHYSFS_setWriteDir(Ego::FileSystem::get().getUserDirectoryPath().c_str())) {
         PHYSFS_deinit();
         return 1;
     }
-
-    if (!_vfs_atexit_registered)
-    {
-        atexit(_vfs_exit); /// @todo Error handling?
-        _vfs_atexit_registered = true;
-    }
-
     _vfs_initialized = true;
     return 0;
 }
 
-//--------------------------------------------------------------------------------------------
-void _vfs_exit()
-{
-    PHYSFS_deinit();
+int vfs_init(const std::string& argument0, const std::string& rootPath) {
+    if (fs_init(argument0, rootPath)) {
+        return 1;
+    }
+
+    if (!Ego::FileSystem::get().directoryExists(Ego::FileSystem::get().getDataDirectoryPath())) {
+        // We can call log functions, they won't try to write to unopened log files
+        // But mainly this is used for sys_popup
+        Log::get().error("The data path isn't a directory.\nData path: '%s'\n", Ego::FileSystem::get().getDataDirectoryPath().c_str());
+        return 1;
+    }
+
+    if (_vfs_initialized) {
+        return 0;
+    }
+
+    if (!PHYSFS_init(argument0.c_str())) {
+        return 1;
+    }
+    std::string temp_path;
+    // Append the data directory to the search directories.
+    temp_path = Ego::FileSystem::get().getDataDirectoryPath() + SLASH_STR;
+    if (!PHYSFS_mount(temp_path.c_str(), "/", 1)) {
+        PHYSFS_deinit();
+        return 1;
+    }
+
+    //---- !!!! make sure the basic directories exist !!!!
+
+    // Ensure that the /user directory exists.
+    if (!Ego::FileSystem::get().directoryExists(Ego::FileSystem::get().getUserDirectoryPath())) {
+        Ego::FileSystem::get().createDirectory(Ego::FileSystem::get().getUserDirectoryPath()); ///< @todo Error handling!
+    }
+
+    // Ensure that the /user/debug directory exists.
+    if (!Ego::FileSystem::get().directoryExists(Ego::FileSystem::get().getUserDirectoryPath())) {
+        printf("WARNING: cannot create write directory %s\n", Ego::FileSystem::get().getUserDirectoryPath().c_str());
+    } else {
+        temp_path = std::string(Ego::FileSystem::get().getUserDirectoryPath()) + "/debug";
+        temp_path = str_convert_slash_sys(temp_path);
+        Ego::FileSystem::get().createDirectory(temp_path.c_str());
+    }
+
+    // Set the write directory to the root user directory.
+    if (!PHYSFS_setWriteDir(Ego::FileSystem::get().getUserDirectoryPath().c_str())) {
+        PHYSFS_deinit();
+        return 1;
+    }
+    _vfs_initialized = true;
+    return 0;
+}
+
+void vfs_uninit() {
+    if (_vfs_initialized) {
+        PHYSFS_deinit();
+    }
+    fs_uninit();
 }
 
 //--------------------------------------------------------------------------------------------
@@ -421,7 +454,7 @@ std::pair<bool, std::string> vfs_resolveReadFilename( const std::string& filenam
     // to see if the filename is already resolved
     std::string filename_specific = str_convert_slash_sys(filename);
 
-    if (fs_fileExists(filename_specific)) {
+    if (Ego::FileSystem::get().fileExists(filename_specific)) {
         return std::make_pair(true, filename_specific);
     }
 
@@ -1631,7 +1664,7 @@ int vfs_removeDirectoryAndContents(const char * dirname, int recursive) {
     // make sure that this is a valid directory
     auto resolvedWriteFilename = vfs_resolveWriteFilename(dirname);
     if (!resolvedWriteFilename.first) return VFS_FALSE;
-    if (!fs_fileIsDirectory(resolvedWriteFilename.second.c_str())) return VFS_FALSE;
+    if (!Ego::FileSystem::get().directoryExists(resolvedWriteFilename.second.c_str())) return VFS_FALSE;
 
     fs_removeDirectoryAndContents(resolvedWriteFilename.second.c_str(), recursive);
 
@@ -2173,13 +2206,13 @@ void vfs_set_base_search_paths( void )
     BAIL_IF_NOT_INIT();
 
     // Put write dir first in search path...
-    PHYSFS_addToSearchPath( fs_getUserDirectory().c_str(), 0 );
+    PHYSFS_addToSearchPath(Ego::FileSystem::get().getUserDirectoryPath().c_str(), 0 );
 
     // Put base path on search path...
-    PHYSFS_addToSearchPath( fs_getDataDirectory().c_str(), 1 );
+    PHYSFS_addToSearchPath(Ego::FileSystem::get().getDataDirectoryPath().c_str(), 1 );
     
     // Put config path on search path...
-    PHYSFS_addToSearchPath(fs_getConfigDirectory().c_str(), 1);
+    PHYSFS_addToSearchPath(Ego::FileSystem::get().getConfigurationDirectoryPath().c_str(), 1);
 }
 
 //--------------------------------------------------------------------------------------------

@@ -72,6 +72,7 @@
 
 //--------------------------------------------------------------------------------------------
 
+#include "egolib/FileSystem/FileSystem.hpp"
 #include "egolib/vfs.h"
 #include "egolib/VFS/FsPath.hpp"
 #include "egolib/VFS/VfsPath.hpp"

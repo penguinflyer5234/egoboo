@@ -305,6 +305,70 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\egolib\FileSystem\iOSSimulator\FileSystem.cpp">
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\iOSSimulator\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\iOSSimulator\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\iOSSimulator\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\iOSSimulator\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\iOSSimulator\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\iOSSimulator\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\iOSSimulator\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\iOSSimulator\FileSystem.o</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\FileSystem.cpp">
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\FileSystem.o</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\iOS\FileSystem.cpp">
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\iOS\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\iOS\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\iOS\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\iOS\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\iOS\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\iOS\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\iOS\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\iOS\FileSystem.o</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\Linux\FileSystem.cpp">
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\Linux\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\Linux\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\Linux\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\Linux\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\Linux\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\Linux\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\Linux\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\Linux\FileSystem.o</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\OSX\FileSystem.cpp">
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\OSX\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\OSX\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\OSX\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\OSX\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\OSX\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\OSX\FileSystem.o</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\OSX\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\OSX\FileSystem.o</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\Windows\FileSystem.cpp">
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\Windows\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)FileSystem\Windows\FileSystem.o</ObjectFileName>
+      <ProgramDataBaseFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\Windows\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)FileSystem\Windows\FileSystem.o</ObjectFileName>
+      <ProgramDataBaseFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\Windows\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)FileSystem\Windows\FileSystem.o</ObjectFileName>
+      <ProgramDataBaseFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\Windows\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)FileSystem\Windows\FileSystem.o</ObjectFileName>
+      <ProgramDataBaseFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+    </ClCompile>
     <ClCompile Include="src\egolib\VFS\FsPath.cpp" />
     <ClCompile Include="src\egolib\Script\IRuntimeStatistics.cpp" />
     <ClCompile Include="src\egolib\Signal\Connection.hpp" />
@@ -510,6 +574,12 @@
     <ClCompile Include="src\egolib\_math.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\egolib\FileSystem\iOSSimulator\FileSystem.hpp" />
+    <ClInclude Include="src\egolib\FileSystem\FileSystem.hpp" />
+    <ClInclude Include="src\egolib\FileSystem\iOS\FileSystem.hpp" />
+    <ClInclude Include="src\egolib\FileSystem\Linux\FileSystem.hpp" />
+    <ClInclude Include="src\egolib\FileSystem\OSX\FileSystem.hpp" />
+    <ClInclude Include="src\egolib\FileSystem\Windows\FileSystem.hpp" />
     <ClInclude Include="src\egolib\VFS\FsPath.hpp" />
     <ClInclude Include="src\egolib\Math\Functors\IsEven.hpp" />
     <ClInclude Include="src\egolib\Math\Functors\IsOdd.hpp" />
