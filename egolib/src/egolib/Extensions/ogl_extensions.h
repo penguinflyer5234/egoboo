@@ -27,7 +27,6 @@
 
 #pragma once
 
-#include "egolib/file_common.h"
 #include "egolib/egoboo_setup.h"
 #include "egolib/Renderer/TextureAddressMode.hpp"
 #include "egolib/Renderer/TextureType.hpp"

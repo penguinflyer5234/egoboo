@@ -1937,7 +1937,7 @@ egolib_rv game_copy_imports( import_list_t * imp_lst )
 		Log::get().warn("%s:%d:%s: unable to create import folder `%s`\n", __FILE__, __LINE__, __FUNCTION__, vfs_getError() );
         return rv_error;
     }
-    vfs_add_mount_point( fs_getUserDirectory(), Ego::FsPath("import"), Ego::VfsPath("mp_import"), 1 );
+    vfs_add_mount_point( Ego::FileSystem::get().getUserDirectoryPath(), Ego::FsPath("import"), Ego::VfsPath("mp_import"), 1 );
 
     // copy all of the imports over
     for (auto import_idx = 0; import_idx < imp_lst->count; import_idx++ )

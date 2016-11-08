@@ -23,7 +23,6 @@
 
 #include "egolib/Console/Console.hpp"
 
-#include "egolib/file_common.h"
 #include "egolib/strutil.h"
 #include "egolib/vfs.h"
 

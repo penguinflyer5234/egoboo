@@ -210,14 +210,12 @@ enum e_vfs_serach_bits
 // FUNCTION PROTOYPES
 //--------------------------------------------------------------------------------------------
 
-/**
- * @brief
- *  Initialize the VFS.
- *  There is no need to uninitialize the VFS: Uninitialization is performed automatically at program termination.
- * @return
- *  @a 0 on success, a non-zero value on failure
- */
-int vfs_init(const char *argv0, const char *root_dir);
+/// @brief Initialize the VFS.
+/// @return @a 0 on success, a non-zero value on failure
+int vfs_init(const std::string& argument0, const std::string& rootPath);
+
+/// @brief Uninitialize the VFS
+void vfs_uninit();
 
 /**@{*/
 /**

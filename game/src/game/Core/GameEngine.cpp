@@ -596,7 +596,7 @@ int SDL_main(int argc, char **argv)
 {
     try
     {
-        Ego::Core::System::initialize(std::string(argv[0]));
+        Ego::Core::System::initialize(std::string(argv[0]), "");
         try
         {
             _gameEngine = std::make_unique<GameEngine>();

@@ -45,7 +45,6 @@
 #include "egolib/Clock.hpp"
 #include "egolib/egoboo_setup.h"
 #include "egolib/endian.h"
-#include "egolib/file_common.h"
 #include "egolib/fileutil.h"
 #include "egolib/font_bmp.h"
 #include "egolib/frustum.h"
@@ -72,6 +71,7 @@
 
 //--------------------------------------------------------------------------------------------
 
+#include "egolib/FileSystem/FileSystem.hpp"
 #include "egolib/vfs.h"
 #include "egolib/VFS/FsPath.hpp"
 #include "egolib/VFS/VfsPath.hpp"

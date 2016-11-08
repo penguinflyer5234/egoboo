@@ -28,7 +28,6 @@
 #include "egolib/Script/Token.hpp"
 #include "egolib/Script/Traits.hpp"
 #include "egolib/Log/_Include.hpp"
-#include "egolib/file_common.h"
 #include "egolib/Logic/Damage.hpp"
 #include "egolib/IDSZ.hpp"
 #include "egolib/Profiles/LocalParticleProfileRef.hpp"

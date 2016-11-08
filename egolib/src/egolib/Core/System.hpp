@@ -35,7 +35,6 @@ namespace Core {
 class SystemService : public Id::NonCopyable {
 protected:
     friend class System;
-    explicit SystemService(const std::string& binaryPath);
     explicit SystemService(const std::string& binaryPath, const std::string& egobooPath);
     virtual ~SystemService();
 public:
@@ -78,9 +77,6 @@ protected:
     /// @brief Construct this system.
     /// @remark Intentionally protected.
     System(const std::string& binaryPath, const std::string& egobooPath);
-    /// @brief Construct this system.
-    /// @remark Intentionally protected.
-    System(const std::string& binaryPath);
 
     /// @brief Destruct this system.
     /// @remark Intentionally protected.
@@ -108,9 +104,6 @@ public:
 
 template <>
 struct CreateFunctor<System> {
-    System *operator()(const std::string& x) const {
-        return new System(x);
-    }
     System *operator()(const std::string& x, const std::string& y) const {
         return new System(x, y);
     }

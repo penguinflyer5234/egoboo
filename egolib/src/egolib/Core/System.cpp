@@ -25,35 +25,6 @@ namespace Core {
 
 const std::string SystemService::VERSION = "0.1.9";
 
-SystemService::SystemService(const std::string& binaryPath) {
-    // Initialize virtual file system.
-    vfs_init(binaryPath.c_str(), nullptr);
-    // Add search paths.
-    /*
-    // Uncomment to display the search paths.
-    vfs_listSearchPaths();
-    */
-    setup_init_base_vfs_paths();
-    /*
-    // Uncomment to display the search paths.
-    vfs_listSearchPaths();
-    */
-
-    // Initialize logging.
-    Log::initialize("/debug/log.txt", Log::Level::Debug);
-
-    // Say hello.
-    Log::get().message("Starting Egoboo Engine %s\n", VERSION.c_str());
-
-    // Load "setup.txt" and download "setup.txt" into the Egoboo configuration.
-    Setup::begin();
-    Setup::download(egoboo_config_t::get());
-
-    // Initialize SDL.
-    Log::get().message("Initializing SDL version %d.%d.%d\n", SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL);
-    SDL_Init(SDL_INIT_TIMER | SDL_INIT_EVENTS);
-}
-
 SystemService::SystemService(const std::string& binaryPath, const std::string& egobooPath) {
     // Initialize virtual file system.
     vfs_init(binaryPath.c_str(), egobooPath.c_str());
@@ -106,9 +77,7 @@ SystemService::~SystemService() {
     vfs_listSearchPaths();
     */
     // Uninitialize virtual file system.
-#if 0
     vfs_uninit();
-#endif
 }
 
 uint32_t SystemService::getTicks() {
@@ -174,56 +143,9 @@ InputService::~InputService() {
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC);
 }
 
-System::System(const std::string& binaryPath) {
-    try {
-        systemService = new SystemService(binaryPath);
-    } catch (...) {
-        std::rethrow_exception(std::current_exception());
-    }
-    try {
-        videoService = new VideoService();
-    } catch (...) {
-        if (systemService) {
-            delete systemService;
-            systemService = nullptr;
-        }
-        std::rethrow_exception(std::current_exception());
-    }
-    try {
-        audioService = new AudioService();
-    } catch (...) {
-        if (videoService) {
-            delete videoService;
-            videoService = nullptr;
-        }
-        if (systemService) {
-            delete systemService;
-            systemService = nullptr;
-        }
-        std::rethrow_exception(std::current_exception());
-    }
-    try {
-        inputService = new InputService();
-    } catch (...) {
-        if (audioService) {
-            delete audioService;
-            audioService = nullptr;
-        }
-        if (videoService) {
-            delete videoService;
-            videoService = nullptr;
-        }
-        if (systemService) {
-            delete systemService;
-            systemService = nullptr;
-        }
-        std::rethrow_exception(std::current_exception());
-    }
-}
-
 System::System(const std::string& binaryPath, const std::string& egobooPath) {
     try {
-        systemService = new SystemService(binaryPath);
+        systemService = new SystemService(binaryPath, egobooPath);
     } catch (...) {
         std::rethrow_exception(std::current_exception());
     }
