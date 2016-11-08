@@ -555,6 +555,7 @@ int Object::damage(Facing direction, const IPair  damage, const DamageType damag
 
                     // write the string into the buffer
                     std::stringstream stringStream;
+                    stringStream.setf(std::ios_base::fixed, std::ios_base::floatfield);
                     stringStream.precision(1);
                     stringStream << (static_cast<float>(actual_damage) / 256.0f);
                     auto text_buffer = stringStream.str();
