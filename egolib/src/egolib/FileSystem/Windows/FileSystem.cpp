@@ -22,11 +22,22 @@
 #include <shlobj.h>
 #include <shellapi.h>
 #include <shlwapi.h>
+#include <codecvt>
 #include "egolib/platform.h"
 #include "egolib/strutil.h"
 
 namespace Ego {
 namespace Windows {
+
+static std::string windowsStringToUTF8(const std::wstring &string) {
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> convert;
+    return convert.to_bytes(string);
+}
+
+static std::wstring utf8StringToWindows(const std::string &string) {
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> convert;
+    return convert.from_bytes(string);
+}
 
 static bool hasAttribs(DWORD variable, DWORD mask) {
     if (INVALID_FILE_ATTRIBUTES != variable) {
@@ -39,31 +50,30 @@ static bool hasAttribs(DWORD variable, DWORD mask) {
 /// @return the user directory path
 /// @todo Error handling.
 static std::string computeUserDirectoryPath() {
-    char temporary[MAX_PATH] = EMPTY_CSTR;
+    wchar_t temporary[MAX_PATH] = EMPTY_CSTR;
     // The save path goes into the user's ApplicationData directory,
     // according to Microsoft's standards.  Will people like this, or
     // should I stick saves someplace easier to find, like My Documents?
-    SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, temporary);
-    strncat(temporary, SLASH_STR "Egoboo", MAX_PATH);
-    return temporary;
+    SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, temporary);
+    return windowsStringToUTF8(temporary) + "\\Egoboo";
 }
 
 /// @brief Compute the binary directory path.
 /// @return the binary directory path
 /// @todo Error handling.
-static std::string computeBinaryDirectoryPath() {
-    char temporary[MAX_PATH] = EMPTY_CSTR;
-    GetModuleFileName(NULL, temporary, MAX_PATH);
-    PathRemoveFileSpec(temporary);
+static std::wstring computeBinaryDirectoryPath() {
+    wchar_t temporary[MAX_PATH] = EMPTY_CSTR;
+    GetModuleFileNameW(NULL, temporary, MAX_PATH);
+    PathRemoveFileSpecW(temporary);
     return temporary;
 }
 
 /// @brief Compute the working directory path.
 /// @return the working directory path
 /// @todo Error handling.
-static std::string computeWorkingDirectoryPath() {
-    char temporary[MAX_PATH] = EMPTY_CSTR;
-    GetCurrentDirectory(MAX_PATH, temporary);
+static std::wstring computeWorkingDirectoryPath() {
+    wchar_t temporary[MAX_PATH] = EMPTY_CSTR;
+    GetCurrentDirectoryW(MAX_PATH, temporary);
     return temporary;
 }
 
@@ -71,35 +81,32 @@ static std::string computeWorkingDirectoryPath() {
 /// @return the data directory path
 /// @throw Id::RuntimeErrorException computation of the data directory path failed
 static std::string computeDataDirectoryPath() {
-    std::string path;
+    std::wstring path;
     DWORD attributes;
-
+    
     // (1) Check for data in the working directory
     path = computeWorkingDirectoryPath();
-    path = path + SLASH_STR + "data";
-    attributes = GetFileAttributes(path.c_str());
+    attributes = GetFileAttributesW(path.c_str());
     if (hasAttribs(attributes, FILE_ATTRIBUTE_DIRECTORY)) {
-        return path;
+        return windowsStringToUTF8(path);
     }
     // if (1) failed
     // (2) Check for data in the binary directory
     path = computeBinaryDirectoryPath();
-    path = path + SLASH_STR + "basicdat";
-    attributes = GetFileAttributes(path.c_str());
+    path = path + L"\\basicdat";
+    attributes = GetFileAttributesW(path.c_str());
     if (hasAttribs(attributes, FILE_ATTRIBUTE_DIRECTORY)) {
-        return path;
+        return windowsStringToUTF8(path);
     }
     throw Id::RuntimeErrorException(__FILE__, __LINE__, "unable to compute data directory path");
 }
 
 FileSystem::FileSystem(const std::string& argument0, const std::string& rootPath) :
     m_userDirectoryPath(computeUserDirectoryPath()),
-    m_binaryDirectoryPath(computeBinaryDirectoryPath()),
     m_dataDirectoryPath(computeDataDirectoryPath()),
     m_configurationDirectoryPath(m_dataDirectoryPath){
     // No logging at this point as logging relies on the file system.
     std::cout << "game directories:" << std::endl;
-    std::cout << "  binary directory:        " << m_binaryDirectoryPath << std::endl;
     std::cout << "  data directory:          " << m_dataDirectoryPath << std::endl;
     std::cout << "  configuration directory: " << m_configurationDirectoryPath << std::endl;
     std::cout << "  user directory:          " << m_userDirectoryPath << std::endl;
@@ -113,10 +120,6 @@ std::string FileSystem::getDataDirectoryPath() const {
     return m_dataDirectoryPath;
 }
 
-std::string FileSystem::getBinaryDirectoryPath() const {
-    return m_binaryDirectoryPath;
-}
-
 std::string FileSystem::getConfigurationDirectoryPath() const {
     return m_configurationDirectoryPath;
 }
@@ -126,7 +129,8 @@ bool FileSystem::exists(const std::string& path) {
         throw std::runtime_error("empty path");
     }
     WIN32_FILE_ATTRIBUTE_DATA fileInfo;
-    if (GetFileAttributesEx(path.c_str(), GetFileExInfoStandard, &fileInfo)) {
+    std::wstring wpath = utf8StringToWindows(path);
+    if (GetFileAttributesExW(wpath.c_str(), GetFileExInfoStandard, &fileInfo)) {
         return true;
     } else {
         return false;
@@ -138,7 +142,8 @@ bool FileSystem::directoryExists(const std::string& path) {
         throw std::runtime_error("empty path");
     }
     WIN32_FILE_ATTRIBUTE_DATA fileInfo;
-    if (GetFileAttributesEx(path.c_str(), GetFileExInfoStandard, &fileInfo)) {
+    std::wstring wpath = utf8StringToWindows(path);
+    if (GetFileAttributesExW(wpath.c_str(), GetFileExInfoStandard, &fileInfo)) {
         return FILE_ATTRIBUTE_DIRECTORY == (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
     } else {
         return false;
@@ -150,7 +155,8 @@ bool FileSystem::fileExists(const std::string& path) {
         throw std::runtime_error("empty path");
     }
     WIN32_FILE_ATTRIBUTE_DATA fileInfo;
-    if (GetFileAttributesEx(path.c_str(), GetFileExInfoStandard, &fileInfo)) {
+    std::wstring wpath = utf8StringToWindows(path);
+    if (GetFileAttributesExW(wpath.c_str(), GetFileExInfoStandard, &fileInfo)) {
         return 0 == (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
     } else {
         return false;
@@ -161,28 +167,93 @@ bool FileSystem::createDirectory(const std::string& path) {
     if (path.empty()) {
         throw Id::RuntimeErrorException(__FILE__, __LINE__, "path is empty");
     }
-    return (0 != CreateDirectory(path.c_str(), NULL)) ? 0 : 1;
+    std::wstring wpath = utf8StringToWindows(path);
+    if (CreateDirectoryW(wpath.c_str(), NULL))
+        return true;
+    return directoryExists(path);
 }
 
 bool FileSystem::removeDirectory(const std::string& path) {
     if (path.empty()) {
         throw Id::RuntimeErrorException(__FILE__, __LINE__, "path is empty");
     }
-    return (0 != RemoveDirectory(path.c_str())) ? 0 : 1;
+    std::wstring wpath = utf8StringToWindows(path);
+    if (RemoveDirectoryW(wpath.c_str()))
+        return true;
+    return !directoryExists(path);
 }
 
 bool FileSystem::removeFile(const std::string& path) {
     if (path.empty()) {
         throw Id::RuntimeErrorException(__FILE__, __LINE__, "path is empty");
     }
-    return (0 != DeleteFile(path.c_str()));
+    std::wstring wpath = utf8StringToWindows(path);
+    if (DeleteFileW(wpath.c_str()))
+        return true;
+    return !fileExists(path);
 }
 
 bool FileSystem::copyFile(const std::string& sourcePath, const std::string& targetPath) {
     if (sourcePath.empty() || targetPath.empty()) {
         throw Id::RuntimeErrorException(__FILE__, __LINE__, "path is empty");
     }
-    return (TRUE == CopyFile(sourcePath.c_str(), targetPath.c_str(), false));
+    std::wstring wSourcePath = utf8StringToWindows(sourcePath);
+    std::wstring wTargetPath = utf8StringToWindows(targetPath);
+    return CopyFileW(wSourcePath.c_str(), wTargetPath.c_str(), false);
+}
+
+void FileSystem::findFiles(const std::string& path, const std::string& extension, const std::function<bool(const std::string&)>& onPathFound) {
+    if (path.empty())
+        throw Id::RuntimeErrorException(__FILE__, __LINE__, "path is empty");
+
+    std::string search = path + "\\*";
+    if (!extension.empty())
+        search += "." + extension;
+    std::wstring wsearch = utf8StringToWindows(search);
+
+    WIN32_FIND_DATAW searchData;
+    HANDLE searchHandle = FindFirstFileW(wsearch.c_str(), &searchData);
+    if (searchHandle == INVALID_HANDLE_VALUE)
+        return;
+
+    try {
+        do {
+            std::string path = windowsStringToUTF8(searchData.cFileName);
+            if (path == "." || path == "..")
+                continue;
+            bool shouldContinue = onPathFound(path);
+            if (!shouldContinue)
+                break;
+        } while (FindNextFileW(searchHandle, &searchData));
+    } catch (...) {
+        FindClose(searchHandle);
+        std::rethrow_exception(std::current_exception());
+    }
+    FindClose(searchHandle);
+}
+
+static bool doShellExecute(const std::string path) {
+    auto wpath = utf8StringToWindows(path);
+    auto result = reinterpret_cast<int>(ShellExecuteW(nullptr, L"open", wpath.c_str(), nullptr, nullptr, SW_SHOWNORMAL));
+    return result > 32;
+}
+
+bool FileSystem::openFileWithDefaultApplication(const std::string& path) {
+    if (path.empty())
+        throw Id::RuntimeErrorException(__FILE__, __LINE__, "path is empty");
+    return doShellExecute(path);
+}
+
+bool FileSystem::showDirectoryInFileBrowser(const std::string& path) {
+    if (path.empty())
+        throw Id::RuntimeErrorException(__FILE__, __LINE__, "path is empty");
+    return doShellExecute(path);
+}
+
+bool FileSystem::openURLWithDefaultApplication(const std::string& url) {
+    if (url.empty())
+        throw Id::RuntimeErrorException(__FILE__, __LINE__, "url is empty");
+    return doShellExecute(url);
 }
 
 } // namespace Windows

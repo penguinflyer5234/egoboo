@@ -28,7 +28,6 @@ struct FileSystem : Ego::FileSystem {
 private:
     std::string m_userDirectoryPath;
     std::string m_dataDirectoryPath;
-    std::string m_binaryDirectoryPath;
     std::string m_configurationDirectoryPath;
 
 public:
@@ -73,6 +72,16 @@ public:
     
     /// @copydoc Ego::FileSystem::fileFiles(const std::string&, const std::string&, const std::function<bool(const std::string& path)>&)
     void findFiles(const std::string& path, const std::string& extension, const std::function<bool(const std::string& path)>& onPathFound) override;
+
+public:
+    /// @copydoc Ego::FileSystem::openFileWithDefaultApplication
+    bool openFileWithDefaultApplication(const std::string& path) override;
+
+    /// @copydoc Ego::FileSystem::showDirectoryInFileBrowser
+    bool showDirectoryInFileBrowser(const std::string& path) override;
+
+    /// @copydoc Ego::FileSystem::openURLWithDefaultApplication
+    bool openURLWithDefaultApplication(const std::string& url) override;
 };
 
 } // namespace Windows

@@ -10,9 +10,6 @@
     <Filter Include="File Formats">
       <UniqueIdentifier>{26f2c8e5-95f8-45aa-b69e-7ad964b40231}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platforms">
-      <UniqueIdentifier>{0263e1c7-208a-4936-a6a8-b9695367fecf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Extensions">
       <UniqueIdentifier>{9ee0c819-9153-4fc0-a5c0-daff3cbb6c8a}</UniqueIdentifier>
     </Filter>
@@ -157,6 +154,30 @@
     <Filter Include="Header Files\Configuration">
       <UniqueIdentifier>{ae7714a7-d83d-4194-aeca-c072b6474de3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FileSystem">
+      <UniqueIdentifier>{5ae14afa-9cad-454e-a467-c85fbc66b271}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileSystem\Windows">
+      <UniqueIdentifier>{3061b4ce-51a8-46f0-aad3-09aa80fddc1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileSystem\OSX">
+      <UniqueIdentifier>{c0b1a0c2-9a36-4288-ad16-c0834362b98c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileSystem\Linux">
+      <UniqueIdentifier>{a6247384-8d0b-4974-82d7-164f9e95c8f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem">
+      <UniqueIdentifier>{b7575e3b-d117-44b8-a791-57c7cec13f46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem\Linux">
+      <UniqueIdentifier>{339999e5-baa6-4ea1-aa9b-49e6f15cb866}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem\Windows">
+      <UniqueIdentifier>{05bf1be6-31b6-4a65-b119-df20fb8cd20d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem\OSX">
+      <UniqueIdentifier>{c66313f7-dcfd-4dde-8040-9a22aefb1322}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\egolib\_math.c">
@@ -169,9 +190,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\egolib\endian.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\egolib\file_common.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\egolib\fileutil.c">
@@ -209,9 +227,6 @@
     </ClCompile>
     <ClCompile Include="src\egolib\extensions\SDL_GL_extensions.c">
       <Filter>Extensions</Filter>
-    </ClCompile>
-    <ClCompile Include="src\egolib\platform\file_linux.c">
-      <Filter>Platforms</Filter>
     </ClCompile>
     <ClCompile Include="src\egolib\math\Random.cpp">
       <Filter>Source Files\Math</Filter>
@@ -378,9 +393,6 @@
     <ClCompile Include="src\egolib\Logic\Team.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
-    <ClCompile Include="src\egolib\Platform\file_win.c">
-      <Filter>Platforms</Filter>
-    </ClCompile>
     <ClCompile Include="src\egolib\Time\LocalTime.cpp">
       <Filter>Source Files\Time</Filter>
     </ClCompile>
@@ -543,6 +555,15 @@
     <ClCompile Include="src\egolib\Mesh\TileFX.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\Linux\FileSystem.cpp">
+      <Filter>Source Files\FileSystem\Linux</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\Windows\FileSystem.cpp">
+      <Filter>Source Files\FileSystem\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\FileSystem.cpp">
+      <Filter>Source Files\FileSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\egolib\vfs.h">
@@ -570,9 +591,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\egolib\fileutil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\egolib\file_common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\egolib\endian.h">
@@ -607,9 +625,6 @@
     </ClInclude>
     <ClInclude Include="src\egolib\extensions\SDL_GL_extensions.h">
       <Filter>Extensions</Filter>
-    </ClInclude>
-    <ClInclude Include="src\egolib\platform\NSFileManager+DirectoryLocations.h">
-      <Filter>Platforms</Filter>
     </ClInclude>
     <ClInclude Include="src\egolib\math\Random.hpp">
       <Filter>Header Files\Math</Filter>
@@ -1361,19 +1376,22 @@
     <ClInclude Include="src\egolib\Mesh\TileFX.hpp">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="src\egolib\FileSystem\FileSystem.hpp">
+      <Filter>Header Files\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\egolib\FileSystem\Linux\FileSystem.hpp">
+      <Filter>Header Files\FileSystem\Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="src\egolib\FileSystem\OSX\FileSystem.hpp">
+      <Filter>Header Files\FileSystem\OSX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\egolib\FileSystem\Windows\FileSystem.hpp">
+      <Filter>Header Files\FileSystem\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\egolib\platform\NSFileManager+DirectoryLocations.m">
-      <Filter>Platforms</Filter>
-    </None>
-    <None Include="src\egolib\platform\file_mac.m">
-      <Filter>Platforms</Filter>
-    </None>
     <None Include="src\egolib\FileFormats\id_normals.inl">
       <Filter>File Formats</Filter>
-    </None>
-    <None Include="src\egolib\Platform\CurrentFunction.inline">
-      <Filter>Platforms</Filter>
     </None>
     <None Include="src\egolib\Script\Functions.in">
       <Filter>Header Files\Script</Filter>
@@ -1389,6 +1407,9 @@
     </None>
     <None Include="src\egolib\FileFormats\MapTileDefinitionsDictionary.html">
       <Filter>File Formats</Filter>
+    </None>
+    <None Include="src\egolib\FileSystem\OSX\FileSystem.mm">
+      <Filter>Source Files\FileSystem\OSX</Filter>
     </None>
   </ItemGroup>
 </Project>

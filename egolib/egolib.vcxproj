@@ -305,6 +305,23 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\egolib\FileSystem\FileSystem.cpp" />
+    <ClCompile Include="src\egolib\FileSystem\Linux\FileSystem.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\egolib\FileSystem\Windows\FileSystem.cpp">
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)Windows\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)Windows\FileSystem.obj</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)Windows\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)Windows\FileSystem.obj</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)Windows\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)Windows\FileSystem.obj</ObjectFileName>
+      <AssemblerListingLocation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)Windows\FileSystem.asm</AssemblerListingLocation>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)Windows\FileSystem.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="src\egolib\Mesh\TileFX.cpp" />
     <ClCompile Include="src\egolib\FileFormats\MapTileDefinitionsDictionary.cpp" />
     <ClCompile Include="src\egolib\VFS\FsPath.cpp" />
@@ -383,7 +400,6 @@
     <ClCompile Include="src\egolib\Logic\PerkHandler.cpp" />
     <ClCompile Include="src\egolib\Renderer\DeferredTexture.cpp" />
     <ClCompile Include="src\egolib\Time\LocalTime.cpp" />
-    <ClCompile Include="src\egolib\Platform\file_win.c" />
     <ClCompile Include="src\egolib\Logic\Team.cpp" />
     <ClCompile Include="src\egolib\Math\Standard.cpp" />
     <ClCompile Include="src\egolib\VFS\VfsPath.cpp" />
@@ -495,23 +511,20 @@
     <ClCompile Include="src\egolib\extensions\SDL_extensions.c" />
     <ClCompile Include="src\egolib\extensions\SDL_GL_extensions.c" />
     <ClCompile Include="src\egolib\fileutil.c" />
-    <ClCompile Include="src\egolib\file_common.c" />
     <ClCompile Include="src\egolib\font_bmp.c" />
     <ClCompile Include="src\egolib\frustum.c" />
     <ClCompile Include="src\egolib\geometry.c" />
     <ClCompile Include="src\egolib\map_functions.c" />
-    <ClCompile Include="src\egolib\platform\file_linux.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="src\egolib\strutil.c" />
     <ClCompile Include="src\egolib\typedef.c" />
     <ClCompile Include="src\egolib\vfs.c" />
     <ClCompile Include="src\egolib\_math.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\egolib\FileSystem\FileSystem.hpp" />
+    <ClInclude Include="src\egolib\FileSystem\Linux\FileSystem.hpp" />
+    <ClInclude Include="src\egolib\FileSystem\OSX\FileSystem.hpp" />
+    <ClInclude Include="src\egolib\FileSystem\Windows\FileSystem.hpp" />
     <ClInclude Include="src\egolib\Mesh\TileFX.hpp" />
     <ClInclude Include="src\egolib\FileFormats\MapTileDefinitionsDictionary.hpp" />
     <ClInclude Include="src\egolib\VFS\FsPath.hpp" />
@@ -771,18 +784,11 @@
     <ClInclude Include="src\egolib\extensions\SDL_extensions.h" />
     <ClInclude Include="src\egolib\extensions\SDL_GL_extensions.h" />
     <ClInclude Include="src\egolib\fileutil.h" />
-    <ClInclude Include="src\egolib\file_common.h" />
     <ClInclude Include="src\egolib\font_bmp.h" />
     <ClInclude Include="src\egolib\frustum.h" />
     <ClInclude Include="src\egolib\geometry.h" />
     <ClInclude Include="src\egolib\map_functions.h" />
     <ClInclude Include="src\egolib\platform.h" />
-    <ClInclude Include="src\egolib\platform\NSFileManager+DirectoryLocations.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="src\egolib\strutil.h" />
     <ClInclude Include="src\egolib\Time.hpp" />
     <ClInclude Include="src\egolib\typedef.h" />
@@ -813,24 +819,18 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </ClInclude>
     <None Include="src\egolib\FileFormats\MapTileDefinitionsDictionary.html" />
+    <None Include="src\egolib\FileSystem\OSX\FileSystem.mm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <FileType>CppCode</FileType>
+    </None>
     <None Include="src\egolib\Math\ColourL.hpp" />
     <None Include="src\egolib\Script\Functions.in" />
     <None Include="src\egolib\Script\Operators.in" />
     <None Include="src\egolib\Script\Variables.in" />
-    <None Include="src\egolib\Platform\CurrentFunction.inline" />
     <None Include="src\egolib\FileFormats\id_normals.inl" />
-    <None Include="src\egolib\platform\file_mac.m">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="src\egolib\platform\NSFileManager+DirectoryLocations.m">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\external\SDL2-2.0.3\VisualC\SDL\SDL.vcxproj">
